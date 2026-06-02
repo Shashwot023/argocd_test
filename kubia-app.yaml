@@ -1,22 +1,21 @@
 apiVersion: argoproj.io/v1alpha1
-kind: AppProject
+kind: Application
 metadata:
-  name: kubia-project
+  name: kubia
   namespace: argocd
 spec:
-  description: kubia production-style project
+  project: kubia-project
 
-  sourceRepos:
-    - https://github.com/Shashwot023/argocd_test.git
+  source:
+    repoURL: https://github.com/Shashwot023/argocd_test.git
+    targetRevision: main
+    path: .
 
-  destinations:
-    - server: https://kubernetes.default.svc
-      namespace: default
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
 
-  namespaceResourceWhitelist:
-    - group: apps
-      kind: Deployment
-    - group: ""
-      kind: Service
-    - group: networking.k8s.io
-      kind: Ingress
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
